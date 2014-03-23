@@ -104,7 +104,10 @@ def remove_indent(code):
 
 def inject_path_append(code):
     cwd = os.getcwd()
-    append = u'import sys\nsys.path.insert(0, "%s")\n\n%s' % (cwd, code)
+    append = u'# Injected by egtest\n'
+    append += u'import sys\n'
+    append += u'sys.path.insert(0, "%s")\n\n' % cwd
+    append += code
     return append
 
 
