@@ -19,12 +19,16 @@ import subprocess
 import sys
 import tempfile
 
+from colorama import Fore, Back, Style
+from colorama import init
+init(autoreset=True)
+
 _PY3 = sys.version_info >= (3, 0)
 
 # Constants
 default_encoding = 'utf-8'
-start_tag = '<test-example>'
-end_tag = '</test-example>'
+start_tag = '<egtest>'
+end_tag = '</egtest>'
 
 
 def main():
@@ -48,16 +52,28 @@ def main():
         # This makes it possible to use via pipe e.g. x | python egtest.py
         text = sys.stdin.read()
 
-    run_examples(text)
+    success = run_examples(text)
+
+    if not success:
+        sys.exit(2)
+        print('\nExample(s) failed')
+    else:
+        print('Example(s) passed')
 
 
 def run_examples(text):
-    print 'Run examples'
     regex = re.compile('%s(.*?)%s' % (start_tag, end_tag), re.DOTALL)
-    for match in re.findall(regex, text):
 
-        run_example(match)
+    ret_vals = []
+    matches = re.findall(regex, text)
+    print('Testing %s example(s)..\n' % len(matches))
 
+    for match in matches:
+        ret_val = run_example(match)
+        ret_vals.append(ret_val)
+
+    # If any of ret_vals != 0 -> failure
+    return not any(ret_vals)
 
 def run_example(example):
     code = remove_non_code(example)
@@ -66,8 +82,19 @@ def run_example(example):
 
     ret_val, stdout, stderr = run_code(code)
     if ret_val != 0:
-        print stdout, stderr
+        print(Fore.RED + 'Error executing code:\n')
+        print(Style.BRIGHT + indent(code.encode('utf-8')))
+        print('')
+        print(Fore.GREEN + 'stdout:')
+        print stdout
+        print(Fore.RED + 'stderr:')
+        print stderr
 
+    return ret_val
+
+
+def indent(text, indent=4):
+    return '\n'.join([u' ' * indent + x for x in text.splitlines()])
 
 def remove_indent(code):
     lines = code.splitlines()
