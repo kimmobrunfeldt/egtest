@@ -13,7 +13,7 @@ script:
   make coverage
 notifications:
   email:
-    - kimmobrunfeldt@gmail.com
+    - kimmobrunfeldt+egtest@gmail.com
 after_success:
   - coveralls --verbose
 
