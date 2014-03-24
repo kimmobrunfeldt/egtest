@@ -53,3 +53,8 @@ def run_command(command):
     return_value = p.wait()
     return return_value, stdout, stderr
 
+
+def indent(text, indent=4):
+    """Indents text with spaces."""
+    return '\n'.join([u' ' * indent + x for x in text.splitlines()])
+

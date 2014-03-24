@@ -13,22 +13,30 @@ Options:
 """
 
 import os
-import re
 import sys
 import tempfile
 
-from colorama import Fore, Back, Style
 from colorama import init
 init(autoreset=True)
 
-import egtest
+import injectors
+import parsers
+import reporters
+import utils
 
 _PY3 = sys.version_info >= (3, 0)
 
-# Constants
-start_tag = '<egtest>'
-end_tag = '</egtest>'
 
+config = {
+    # All parsers in egtest.parsers.available dict
+    'parser': 'github_markdown',
+
+    # All reporters in egtest.reporters.available dict
+    'reporter': 'basic',
+
+    # Commands to execute before running code block
+    'before': ['']
+}
 
 def main():
     from docopt import docopt
@@ -39,7 +47,7 @@ def main():
     filename = arguments['<filename>']
     if filename is not None:
         try:
-            text = egtest.utils.read_file(filename, encoding)
+            text = utils.read_file(filename)
         except IOError as e:
             print('Could not open file. %s' % e)
             sys.exit(1)
@@ -47,7 +55,7 @@ def main():
         # This makes it possible to use via pipe e.g. x | python egtest.py
         text = sys.stdin.read()
 
-    success = run_examples(text)
+    success = run_code_blocks(text)
 
     if not success:
         sys.exit(2)
@@ -56,71 +64,41 @@ def main():
         print('Example(s) passed')
 
 
-def run_examples(text):
-    regex = re.compile('%s(.*?)%s' % (start_tag, end_tag), re.DOTALL)
+def run_code_blocks(text):
+    Parser = parsers.available[config['parser']]
+    parser = Parser(text)
 
-    ret_vals = []
-    matches = re.findall(regex, text)
-    print('Testing %s example(s)..\n' % len(matches))
+    blocks = parser.blocks()
+    print('Testing %s example(s)..\n' % len(blocks))
 
-    for match in matches:
-        ret_val = run_example(match)
-        ret_vals.append(ret_val)
+    exec_infos = []
+    for code_info in blocks:
+        exec_info = run_code_block(code_info)
+        exec_infos.append(exec_info)
 
-    # If any of ret_vals != 0 -> failure
-    return not any(ret_vals)
-
-def run_example(example):
-    code = remove_non_code(example)
-    code = remove_indent(code)
-    code = inject_path_append(code)
-
-    ret_val, stdout, stderr = run_code(code)
-    if ret_val != 0:
-        print(Fore.RED + 'Error executing code:\n')
-        print(Style.BRIGHT + indent(code.encode('utf-8')))
-        print('')
-        print(Fore.GREEN + 'stdout:')
-        print stdout
-        print(Fore.RED + 'stderr:')
-        print stderr
-
-    return ret_val
+    # If any of return values != 0 -> failure
+    return not any([info.return_value for info in exec_infos])
 
 
-def indent(text, indent=4):
-    return '\n'.join([u' ' * indent + x for x in text.splitlines()])
+def run_code_block(code_info):
+    new_code_info = injectors.inject_all(code_info)
 
-def remove_indent(code):
-    lines = code.splitlines()
-    indent = len(lines[0]) - len(lines[0].lstrip())
-    return '\n'.join([x[indent:] for x in lines])
+    exec_info = run_code(code)
+    return exec_info
 
 
-def inject_path_append(code):
-    cwd = os.getcwd()
-    append = u'# Injected by egtest\n'
-    append += u'import sys\n'
-    append += u'sys.path.insert(0, "%s")\n\n' % cwd
-    append += code
-    return append
-
-
-def remove_non_code(example):
-    example = example.strip()
-    # Remove first tag line, ```python
-    # also remove ``` and tag end line from end
-    return '\n'.join(example.splitlines()[2:-2])
-
-
-def run_code(code):
-    f, abspath = tempfile.mkstemp(suffix='.py', text=True)
-    write_file(code, abspath)
-    run_return = run_command(['python', abspath])
+def run_code(code_info):
+    f, abspath = tempfile.mkstemp(text=True)
+    utils.write_file(code, abspath)
+    ret_val, stdout, stderr = run_command([code_info.command, abspath])
+    exec_info = reporters.ExecInfo(
+        return_value=ret_val,
+        stdout=stdout,
+        stderr=stderr
+    )
 
     os.remove(abspath)
-    return run_return
-
+    return exec_info
 
 
 if __name__ == '__main__':
