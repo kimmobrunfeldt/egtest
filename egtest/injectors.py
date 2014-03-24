@@ -15,7 +15,7 @@ def should_inject_custom(code_info):
 
 
 def inject_custom(code_info):
-    return
+    return code_info
 
 
 def inject_python(code_info):

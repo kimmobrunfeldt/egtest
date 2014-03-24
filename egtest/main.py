@@ -82,15 +82,20 @@ def run_code_blocks(text):
 
 def run_code_block(code_info):
     new_code_info = injectors.inject_all(code_info)
+    exec_info = run_code(new_code_info)
 
-    exec_info = run_code(code)
+    # WTF
+    Reporter = reporters.available[config['reporter']]
+    reporter = Reporter()
+    reporter.report(code_info, exec_info)
+
     return exec_info
 
 
 def run_code(code_info):
     f, abspath = tempfile.mkstemp(text=True)
-    utils.write_file(code, abspath)
-    ret_val, stdout, stderr = run_command([code_info.command, abspath])
+    utils.write_file(code_info.code, abspath)
+    ret_val, stdout, stderr = utils.run_command([code_info.command, abspath])
     exec_info = reporters.ExecInfo(
         return_value=ret_val,
         stdout=stdout,

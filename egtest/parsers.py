@@ -2,11 +2,13 @@
 Text parsers.
 """
 
-from collections import namedtuple
 import re
 
 
-CodeInfo = namedtuple('Code', ['command', 'code'])
+class CodeInfo(object):
+    def __init__(self, command, code):
+        self.command = command
+        self.code = code
 
 
 class GitHubMarkdownParser(object):
@@ -33,19 +35,11 @@ class GitHubMarkdownParser(object):
 
     def _find_command(self, block):
         """Finds language of code block"""
-        block = block.strip()
-        start_tag = block.split('\n', 1).strip()
-        if start_tag == '```':
-            return None
-
-        return block[len('```'):]
+        return block.split('\n', 1)[0].strip()
 
     def _clean_block(self, block):
         """Cleans single block match text from surrounding markdown syntax."""
-        block = block.strip()
-        # Remove first line: ```<language>
-        # and last line: ```
-        return '\n'.join(block.splitlines()[1:-1])
+        return block.split('\n', 1)[1].strip()
 
     def _remove_indentation(self, text):
         """Removes extra indentation from text block. Indentation of first text
