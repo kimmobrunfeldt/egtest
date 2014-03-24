@@ -5,7 +5,7 @@
 [![Badge fury](https://badge.fury.io/py/egtest.png)](https://badge.fury.io/py/egtest.png)
 [![Badge PyPi](https://pypip.in/d/egtest/badge.png)](https://pypip.in/d/egtest/badge.png)
 
-*E.g. test* parses code blocks from documentation, runs them and reports possible errors.
+*E.g. test* parses code blocks from documentation, runs them and reports possible errors. Incorrect example is worse than no example at all.
 
 **Example**
 
@@ -16,7 +16,7 @@ Python code block, which tries to demonstrate printing
 print('This is how you print a line)
 ```
 
-Running *egtest* against this documentation looks like this:
+Running `egtest README.md` looks like this:
 
 ![screenshot](docs/screenshot.png)
 
