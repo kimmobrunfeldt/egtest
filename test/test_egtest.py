@@ -10,5 +10,5 @@ import egtest
 
 class TestEgtest(unittest.TestCase):
 
-    def test_parse(self):
+    def test_invalid(self):
         raise NotImplementedError('Tests are not implemented yet')
