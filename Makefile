@@ -40,7 +40,8 @@ test-all:
 	tox
 
 coverage:
-	py.test --cov egtest -v --cov-report term-missing
+	coverage run --branch --source egtest,main.py -m pytest; coverage report -m
+
 
 release: clean coverage test-all
 	python scripts/make-release.py $(bump)
