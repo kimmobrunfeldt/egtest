@@ -32,7 +32,7 @@ def inject_all(code_info):
     """Executes all matching injectors."""
 
     new_code_info = CodeInfo(code_info.command, code_info.code)
-    for decision, inject_func in injectors:
+    for decision, inject_func in hooks:
 
         if hasattr(decision, '__call__'):
             # It is a function
@@ -51,7 +51,7 @@ def inject_all(code_info):
 # First object can be either function to decide if the injection should be done,
 # or str which is name of egtest.parsers.CodeInfo.command to be matched.
 # Injectors are executed in the order of list
-injectors = [
+hooks = [
     (should_inject_custom, inject_custom),
     ('python', inject_python)
 ]
