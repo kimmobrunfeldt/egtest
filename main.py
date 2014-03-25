@@ -30,10 +30,7 @@ config = {
     'parser': 'github_markdown',
 
     # All reporters in egtest.reporters.available dict
-    'reporter': 'basic',
-
-    # Commands to execute before running code block
-    'before': ['']
+    'reporter': 'basic'
 }
 
 def main():
