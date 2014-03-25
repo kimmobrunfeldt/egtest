@@ -61,5 +61,5 @@ class GitHubMarkdownParser(object):
 
 # List all available parsers for config-friendly usage
 available = {
-    'github_markdown': GitHubMarkdownParser
+    'markdown': GitHubMarkdownParser
 }

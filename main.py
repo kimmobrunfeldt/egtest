@@ -3,19 +3,24 @@
 """E.g. test - Test example code blocks in documentation
 
 Usage:
-  egtest [<filename>]
+  egtest [<filename>] [--reporter=<reporter>] [--parser=<parser>] [--config=<config>]
   egtest -h | --help
   egtest --version
 
 Examples:
   egtest readme.md
+  egtest --reporter json readme.md
   cat readme.md | egtest
 
 Options:
+  -r --reporter=<reporter>  Sets reporter. Valid values: basic, json.
+  -p --parser=<parser>      Sets parser. Valid values: markdown.
+  -c --config=<config>      External configuration. File path to config JSON.
   -h --help                 Show this screen.
   -v --version              Show version.
 """
 
+import json
 import os
 import sys
 import tempfile
@@ -23,26 +28,35 @@ import tempfile
 from egtest import injecthooks, parsers, reporters, utils, __version__
 
 
-config = {
+default_config = {
     # All parsers in egtest.parsers.available dict
-    'parser': 'github_markdown',
+    'parser': 'markdown',
 
     # All reporters in egtest.reporters.available dict
     'reporter': 'basic'
 }
 
-def main():
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+
     from docopt import docopt
     arguments = docopt(
         __doc__,
-        argv=sys.argv[1:],
+        argv=argv,
         help=True,
         version=__version__
     )
 
-    # Read examples from whatever source
+    config = combine_configs(arguments)
+    text = read_text(config['filename'])
+    success = run_code_blocks(config, text)
 
-    filename = arguments['<filename>']
+    if not success:
+        sys.exit(2)
+
+
+def read_text(filename):
     if filename is not None:
         try:
             text = utils.read_file(filename)
@@ -53,13 +67,38 @@ def main():
         # This makes it possible to use via pipe e.g. x | python egtest.py
         text = sys.stdin.read()
 
-    success = run_code_blocks(text)
-
-    if not success:
-        sys.exit(2)
+    return text
 
 
-def run_code_blocks(text):
+def combine_configs(arguments):
+    """Combines all configurations:
+    - Default configuration
+    - External JSON configuration
+    - Commandline arguments
+
+    Lower configuration overrides above configurations.
+    """
+    config = default_config.copy()
+
+    if '--config' in arguments and arguments['--config']:
+        config.update(read_jsonfile(arguments['--config']))
+
+    arguments_config = {
+        'reporter': arguments['--reporter'],
+        'parser': arguments['--parser'],
+        'filename': arguments['<filename>']
+    }
+    config.update((k, v) for k, v in arguments_config.items()
+                  if v is not None or k == 'filename')
+
+    return config
+
+
+def read_jsonfile(file_path):
+    return json.loads(open(file_path).read())
+
+
+def run_code_blocks(config, text):
     Parser = parsers.available[config['parser']]
     parser = Parser(text)
 
