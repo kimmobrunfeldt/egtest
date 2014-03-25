@@ -11,6 +11,7 @@ Examples:
   egtest readme.md
   egtest --reporter json readme.md
   cat readme.md | egtest
+  egtest < readme.md
 
 Options:
   -r --reporter=<reporter>  Sets reporter. Valid values: basic, json.
@@ -47,6 +48,7 @@ def main(argv):
     )
 
     config = combine_configs(arguments)
+    validate_config(config)
     text = read_text(config['filename'])
     success = run_code_blocks(config, text)
 
@@ -90,6 +92,16 @@ def combine_configs(arguments):
                   if v is not None or k == 'filename')
 
     return config
+
+
+def validate_config(config):
+    if config['parser'] not in parsers.available:
+        print('No such parser: %s' % config['parser'])
+        sys.exit(1)
+
+    if config['reporter'] not in reporters.available:
+        print('No such reporter: %s' % config['reporter'])
+        sys.exit(1)
 
 
 def read_jsonfile(file_path):
