@@ -36,9 +36,7 @@ default_config = {
     'reporter': 'basic'
 }
 
-def main(argv=None):
-    if argv is None:
-        argv = sys.argv[1:]
+def main(argv):
 
     from docopt import docopt
     arguments = docopt(
@@ -144,6 +142,6 @@ def run_code(code_info):
 
 if __name__ == '__main__':
     try:
-        main()
+        main(sys.argv[1:])
     except KeyboardInterrupt:
         print('KeyboardInterrupt')
