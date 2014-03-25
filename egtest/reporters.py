@@ -2,6 +2,8 @@
 Text parsers.
 """
 
+import json
+
 from colorama import Fore, Style
 from colorama import init
 init(autoreset=True)
@@ -37,11 +39,38 @@ class BasicReporter(object):
             print(exec_info.stdout)
             print(Fore.RED + 'stderr:')
             print(exec_info.stderr)
+            print(Style.BRIGHT + '---------------------\n')
 
     def on_finish(self, exec_infos, success):
         """
         exec_infos: List of ExecInfo objects. Contains all executions.
         """
+        if success:
+            print(Fore.GREEN + '\nSUCCESS')
+        else:
+            print(Fore.RED + '\nFAILURE')
+
+
+class JsonReporter(object):
+
+    def __init__(self, blocks):
+        """
+        blocks: code blocks to be executed
+        """
+        self._blocks = blocks
+
+    def on_execute(self, code_info, exec_info):
+        if exec_info.return_value != 0:
+            print(Fore.RED + 'Error executing code:\n')
+            print(Style.BRIGHT + indent(code_info.code.encode('utf-8')))
+            print('')
+            print(Fore.GREEN + 'stdout:')
+            print(exec_info.stdout)
+            print(Fore.RED + 'stderr:')
+            print(exec_info.stderr)
+            print(Style.BRIGHT + '---------------------\n')
+
+    def on_finish(self, exec_infos, success):
         if success:
             print(Fore.GREEN + '\nSUCCESS')
         else:
