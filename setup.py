@@ -32,6 +32,11 @@ setup(
     packages=[
         'egtest',
     ],
+    entry_points={
+        'console_scripts': [
+            'egtest = main:main'
+        ],
+    },
     package_dir={'egtest': 'egtest'},
     include_package_data=True,
     install_requires=reqs,
