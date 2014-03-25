@@ -8,7 +8,7 @@ from colorama import Fore, Style
 from colorama import init
 init(autoreset=True)
 
-from utils import indent
+from .utils import indent
 
 
 class ExecInfo(object):

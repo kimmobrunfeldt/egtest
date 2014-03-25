@@ -4,7 +4,7 @@ All injectors.
 
 import os
 
-from parsers import CodeInfo
+from .parsers import CodeInfo
 
 
 def should_inject_custom(code_info):
