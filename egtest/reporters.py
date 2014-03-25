@@ -43,7 +43,7 @@ class BasicReporter(object):
         exec_infos: List of ExecInfo objects. Contains all executions.
         """
         if success:
-            print(Fore.GREEN + 'SUCCESS')
+            print(Fore.GREEN + '\nSUCCESS')
         else:
             print(Fore.RED + '\nFAILURE')
 
