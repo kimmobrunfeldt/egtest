@@ -3,9 +3,13 @@
 """E.g. test - Test example code blocks in documentation
 
 Usage:
-  egtest.py [<filename>]
-  egtest.py -h | --help
-  egtest.py --version
+  egtest [<filename>]
+  egtest -h | --help
+  egtest --version
+
+Examples:
+  egtest readme.md
+  cat readme.md | egtest
 
 Options:
   -h --help                 Show this screen.
@@ -16,13 +20,7 @@ import os
 import sys
 import tempfile
 
-from colorama import init
-init(autoreset=True)
-
-import injectors
-import parsers
-import reporters
-import utils
+from egtest import injecthooks, parsers, reporters, utils, __version__
 
 _PY3 = sys.version_info >= (3, 0)
 
@@ -40,7 +38,12 @@ config = {
 
 def main():
     from docopt import docopt
-    arguments = docopt(__doc__, argv=sys.argv[1:], help=True)
+    arguments = docopt(
+        __doc__,
+        argv=sys.argv[1:],
+        help=True,
+        version=__version__
+    )
 
     # Read examples from whatever source
 
@@ -59,9 +62,6 @@ def main():
 
     if not success:
         sys.exit(2)
-        print('\nExample(s) failed')
-    else:
-        print('Example(s) passed')
 
 
 def run_code_blocks(text):
@@ -69,26 +69,27 @@ def run_code_blocks(text):
     parser = Parser(text)
 
     blocks = parser.blocks()
-    print('Testing %s example(s)..\n' % len(blocks))
+
+    Reporter = reporters.available[config['reporter']]
+    reporter = Reporter(blocks)
 
     exec_infos = []
     for code_info in blocks:
         exec_info = run_code_block(code_info)
         exec_infos.append(exec_info)
 
+        reporter.on_execute(code_info, exec_info)
+
     # If any of return values != 0 -> failure
-    return not any([info.return_value for info in exec_infos])
+    success = not any([info.return_value for info in exec_infos])
+    reporter.on_finish(exec_infos, success)
+
+    return success
 
 
 def run_code_block(code_info):
-    new_code_info = injectors.inject_all(code_info)
+    new_code_info = injecthooks.inject_all(code_info)
     exec_info = run_code(new_code_info)
-
-    # WTF
-    Reporter = reporters.available[config['reporter']]
-    reporter = Reporter()
-    reporter.report(code_info, exec_info)
-
     return exec_info
 
 
@@ -110,4 +111,4 @@ if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        print('Quit.')
+        print('KeyboardInterrupt')
