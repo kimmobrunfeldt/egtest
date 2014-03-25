@@ -35,11 +35,20 @@ class GitHubMarkdownParser(object):
 
     def _find_command(self, block):
         """Finds language of code block"""
-        return block.split('\n', 1)[0].strip()
+        splitted = block.split('\n', 1)
+        if not splitted[0]:
+            return None
+
+        return splitted[0].strip()
 
     def _clean_block(self, block):
         """Cleans single block match text from surrounding markdown syntax."""
-        return block.split('\n', 1)[1].strip()
+        splitted = block.split('\n', 1)
+
+        if len(splitted) < 2:
+            return block
+
+        return splitted[1].strip()
 
     def _remove_indentation(self, text):
         """Removes extra indentation from text block. Indentation of first text
