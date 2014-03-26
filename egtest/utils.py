@@ -18,7 +18,7 @@ def read_file(filepath, encoding='utf-8'):
         content = f.read()
 
     if not _PY3:
-        content = content.decode(encoding, errors='replace')
+        content = content.decode(encoding, 'replace')
 
     return content
 
@@ -29,7 +29,7 @@ def write_file(text, filepath, encoding='utf-8'):
     if _PY3:
         open_func = lambda f, mode: open(f, mode, encoding=encoding)
     else:
-        text = text.encode(encoding, errors='replace')
+        text = text.encode(encoding, 'replace')
 
     with open_func(filepath, 'w') as f:
         f.write(text)
