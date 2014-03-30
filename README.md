@@ -98,7 +98,7 @@ Currently only one format is supported, which is GitHub's markdown. It parses on
 
 ### Injecting code
 
-You can inject your own code before which will be injected on each example before running. For Python code, egtest adds current working directory to *sys.path* to make imports possible.
+It is possible to define custom code which will be injected on each example before running. For Python code, *egtest* adds current working directory to *sys.path* to make imports possible.
 
 *Currently there's no sensible way to add custom injections without modifying [egtest/injecthooks.py](egtest/injecthooks.py).*
 
