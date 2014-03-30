@@ -23,7 +23,7 @@ Running `egtest README.md` looks like this:
 
 ## Install
 
-Python versions 2.6 - 3.3 are supported and tested against.
+Python versions 2.6, 2.7 and 3.3 are supported and tested against.
 
 Install latest release with *pip*:
 
