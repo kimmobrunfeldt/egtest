@@ -24,7 +24,7 @@ Running `egtest README.md` looks like this:
 
 ## Install
 
-Python versions 2.6, 2.7 and 3.3 are supported and tested against.
+You'll need Python to run egtest. Python versions 2.6, 2.7 and 3.3 are supported and tested against.
 
 Install latest release with *pip*:
 
@@ -40,7 +40,9 @@ Install latest development version using *setup.py*:
     cd egtest
     python setup.py install
 
-# Detailed usage
+## Detailed usage
+
+Code examples are written into temporary files. They are run with command parsed from code block, and if the temporary code exits with non-zero return value, *egtest* reports errors.
 
 Output of `egtest --help`
 
@@ -66,7 +68,7 @@ Output of `egtest --help`
 
 You can use external JSON file along with command line parameters to control egtest. Check [example-config.json](docs/example-config.json).
 
-## Reporters
+### Reporters
 
 *E.g. test* supports two different reporter types: *basic* and *json*.
 
@@ -88,11 +90,17 @@ When JSON reporter is used, *egtest* outputs results in JSON format. For example
 }
 ```
 
-## Parsers
+### Parsers
 
 Parser reads documentation in text format and extracts all code examples including what command should be used to run them.
 
 Currently only one format is supported, which is GitHub's markdown. It parses only [fenced code blocks](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#code-and-syntax-highlighting) to extract the language of code.
+
+### Injecting code
+
+You can inject your own code before which will be injected on each example before running. For Python code, egtest adds current working directory to *sys.path* to make imports possible.
+
+*Currently there's no sensible way to add custom injections without modifying [egtest/injecthooks.py](egtest/injecthooks.py).*
 
 ## Contributing
 
