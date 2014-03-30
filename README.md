@@ -104,7 +104,7 @@ It is possible to define custom code which will be injected on each example befo
 
 ## Motivation
 
-I wrote this to test [examples for Nap](https://github.com/kimmobrunfeldt/nap#examples), which is a convenience wrapper for *requests*. [Doctest](https://docs.python.org/2/library/doctest.html) has similar functionality but you need to start every line in example with `>>>`. It makes the example harder to follow. [Sphinx](http://sphinx-doc.org/) supports running examples like *egtest* does but Sphinx is a bit heavyweight and it supports only Python.
+I wrote this to test [examples for Nap](https://github.com/kimmobrunfeldt/nap#examples), which is a convenience wrapper for *requests*. Nap's examples are tested for each commit with Travis CI. [Doctest](https://docs.python.org/2/library/doctest.html) has similar functionality but you need to start every line in example with `>>>`. It makes the examples harder to follow. [Sphinx](http://sphinx-doc.org/) supports running examples like *egtest* does but Sphinx is a bit heavyweight and it supports only Python.
 
 ## Contributing
 
