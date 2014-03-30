@@ -39,6 +39,11 @@ Valid values: `major`, `minor`, `patch`.
 
 * Add release notes to GitHub
 
+## Uploading to PyPi
+
+* Checkout tag you want to release
+* Run `make pypi`
+
 ## Contributing
 
 Contributions are welcome, and they are greatly appreciated! Every

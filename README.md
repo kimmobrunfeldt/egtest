@@ -3,9 +3,8 @@
 [![Build Status](https://travis-ci.org/kimmobrunfeldt/egtest.png?branch=master)](https://travis-ci.org/kimmobrunfeldt/egtest)
 [![Coverage Status](https://coveralls.io/repos/kimmobrunfeldt/egtest/badge.png?branch=master)](https://coveralls.io/r/kimmobrunfeldt/egtest?branch=master)
 [![Badge fury](https://badge.fury.io/py/egtest.png)](https://badge.fury.io/py/egtest.png)
-[![Badge PyPi](https://pypip.in/d/egtest/badge.png)](https://pypip.in/d/egtest/badge.png)
 
-*E.g. test* parses code blocks from documentation, runs them and reports possible errors. Incorrect example is worse than no example at all. Your examples can be written in any language.
+Incorrect example is worse than no example at all. *E.g. test* parses code blocks from documentation, runs them and reports possible errors. Your examples can be written in any language.
 
 **Example**
 
