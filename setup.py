@@ -9,6 +9,7 @@ install_reqs = parse_requirements('requirements.txt')
 # e.g. ['django==1.5.1', 'mezzanine==1.4.6']
 reqs = [str(ir.req) for ir in install_reqs]
 
+print(reqs)
 
 try:
     from setuptools import setup
@@ -34,12 +35,13 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'egtest = main:main'
+            'egtest = egtest.main:main'
         ],
     },
     package_dir={'egtest': 'egtest'},
     include_package_data=True,
     install_requires=reqs,
+    dependency_links=['https://github.com/kimmobrunfeldt/colorama/tarball/master#egg=colorama'],
     license='MIT',
     zip_safe=False,
     keywords='egtest test documentation doctest',

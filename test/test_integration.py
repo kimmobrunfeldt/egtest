@@ -10,7 +10,7 @@ Though these tests are not very clean anyways.
 
 import json
 import unittest
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE
 
 from egtest import utils
 
@@ -91,7 +91,8 @@ class TestMain(unittest.TestCase):
         """Return Popen format command for running egtest."""
         cmd = [
             'python',
-            'main.py'
+            '-m'
+            'egtest.main'
         ]
         cmd += params.split()
         if json_report:

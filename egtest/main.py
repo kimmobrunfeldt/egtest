@@ -26,9 +26,10 @@ import os
 import sys
 import tempfile
 
+from docopt import docopt
 import six
 
-from egtest import injecthooks, parsers, reporters, utils, __version__
+from . import injecthooks, parsers, reporters, utils, __version__
 
 
 default_config = {
@@ -39,9 +40,15 @@ default_config = {
     'reporter': 'basic'
 }
 
-def main(argv):
 
-    from docopt import docopt
+def main():
+    try:
+        egtest_main(sys.argv[1:])
+    except KeyboardInterrupt:
+        print('KeyboardInterrupt')
+
+
+def egtest_main(argv):
     arguments = docopt(
         __doc__,
         argv=argv,
@@ -158,7 +165,4 @@ def run_code(code_info):
 
 
 if __name__ == '__main__':
-    try:
-        main(sys.argv[1:])
-    except KeyboardInterrupt:
-        print('KeyboardInterrupt')
+    main()
