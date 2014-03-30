@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/kimmobrunfeldt/egtest/badge.png?branch=master)](https://coveralls.io/r/kimmobrunfeldt/egtest?branch=master)
 [![Badge fury](https://badge.fury.io/py/egtest.png)](https://badge.fury.io/py/egtest.png)
 
-Incorrect example is worse than no example at all. *E.g. test* parses code blocks from documentation, runs them and reports possible errors. Your examples can be written in any language.
+Incorrect example is worse than no example at all. *E.g. test* parses code blocks from documentation, runs them and reports possible errors. Your examples can be written in any language. There are similar projects but [they didn't suit my needs](#motivation).
 
 **Example**
 
@@ -100,6 +100,11 @@ Currently only one format is supported, which is GitHub's markdown. It parses on
 It is possible to define custom code which will be injected on each example before running. For Python code, *egtest* adds current working directory to *sys.path* to make imports possible.
 
 *Currently there's no sensible way to add custom injections without modifying [egtest/injecthooks.py](egtest/injecthooks.py).*
+
+
+## Motivation
+
+I wrote this to test [examples for Nap](https://github.com/kimmobrunfeldt/nap#examples), which is a convenience wrapper for *requests*. [Doctest](https://docs.python.org/2/library/doctest.html) has similar functionality but you need to start every line in example with `>>>`. It makes the example harder to follow. [Sphinx](http://sphinx-doc.org/) supports running examples like *egtest* does but Sphinx is a bit heavyweight and it supports only Python.
 
 ## Contributing
 
