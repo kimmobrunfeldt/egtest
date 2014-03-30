@@ -31,7 +31,7 @@ clean-coverage:
 	rm -f .coverage
 
 lint:
-	flake8 --exclude=__init__.py egtest test
+	flake8 --ignore=E501 --exclude=__init__.py egtest test
 
 test:
 	py.test
