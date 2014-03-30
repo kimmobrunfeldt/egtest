@@ -36,7 +36,7 @@ lint:
 test:
 	py.test
 
-test-all:
+test-all: clean
 	tox
 
 coverage:
