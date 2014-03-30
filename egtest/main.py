@@ -29,7 +29,14 @@ import tempfile
 from docopt import docopt
 import six
 
-from . import injecthooks, parsers, reporters, utils, __version__
+# Check:
+# http://stackoverflow.com/questions/11536764/attempted-relative-import-in-non-package-even-with-init-py/
+try:
+    from . import injecthooks, parsers, reporters, utils, __version__
+except ValueError as e:
+    print('ValueError: %s' % e)
+    print('If you need to run the script directly, use: python -m egtest.main')
+    sys.exit(1)
 
 
 default_config = {
