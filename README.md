@@ -20,6 +20,7 @@ Running `egtest README.md` looks like this:
 
 ![screenshot](docs/screenshot.png)
 
+*E.g. test* supports piping, reporting in JSON format and everything needed to integrate with other tools. Check out [detailed usage](#detailed-usage).
 
 ## Install
 
@@ -39,6 +40,59 @@ Install latest development version using *setup.py*:
     cd egtest
     python setup.py install
 
+# Detailed usage
+
+Output of `egtest --help`
+
+    E.g. test - Test example code blocks in documentation
+
+    Usage:
+      egtest [<filename>] [--reporter=<reporter>] [--parser=<parser>] [--config=<config>]
+      egtest -h | --help
+      egtest --version
+
+    Examples:
+      egtest readme.md
+      egtest --reporter json readme.md
+      cat readme.md | egtest
+      egtest < readme.md
+
+    Options:
+      -r --reporter=<reporter>  Sets reporter. Valid values: basic, json.
+      -p --parser=<parser>      Sets parser. Valid values: markdown.
+      -c --config=<config>      External configuration. File path to config JSON.
+      -h --help                 Show this screen.
+      -v --version              Show version.
+
+You can use external JSON file along with command line parameters to control egtest. Check [example-config.json](docs/example-config.json).
+
+## Reporters
+
+*E.g. test* supports two different reporter types: *basic* and *json*.
+
+When JSON reporter is used, *egtest* outputs results in JSON format. For example `egtest --reporter json README.md | python -m json.tool` outputs:
+
+```json
+{
+    "executions": [
+        {
+            "code": "# We have syntax error in the example\nprint('This is how you print a line)",
+            "command": "python",
+            "output": {
+                "returnValue": 1,
+                "stderr": "  File \"/var/folders/2l/qmg1cgh90h1fdzjcdp9_ss580000gp/T/tmpOJfmPa\", line 6\n    print('This is how you print a line)\n                                       ^\nSyntaxError: EOL while scanning string literal\n",
+                "stdout": ""
+            }
+        }
+    ]
+}
+```
+
+## Parsers
+
+Parser reads documentation in text format and extracts all code examples including what command should be used to run them.
+
+Currently only one format is supported, which is GitHub's markdown. It parses only [fenced code blocks](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#code-and-syntax-highlighting) to extract the language of code.
 
 ## Contributing
 
