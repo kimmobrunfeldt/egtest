@@ -34,7 +34,7 @@ lint:
 	flake8 --ignore=E501 --exclude=__init__.py egtest test
 
 test:
-	py.test
+	py.test -rfEs
 
 test-all: clean
 	tox
