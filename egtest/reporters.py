@@ -2,6 +2,10 @@
 Text parsers.
 """
 
+from __future__ import print_function
+import six
+print = six.print_
+
 import json
 
 from colorama import Fore, Style
@@ -32,13 +36,15 @@ class BasicReporter(object):
         Outputs execution information to user.
         """
         if exec_info.return_value != 0:
-            print(Style.BRIGHT + '---------------------\n')
-            print(Fore.RED + 'Error executing code:\n')
-            print(Style.BRIGHT + indent(code_info.code.encode('utf-8')))
-            print('')
-            print(Fore.GREEN + 'stdout:')
+            print('%s---------------------\n' % Style.BRIGHT)
+            print('%sError executing code:\n' % Fore.RED)
+            print(u'{0}{1}\n'.format(
+                Style.BRIGHT,
+                indent(code_info.code)
+            ))
+            print('%sstdout:' % Fore.GREEN)
             print(exec_info.stdout)
-            print(Fore.RED + 'stderr:')
+            print('%sstderr:' % Fore.RED)
             print(exec_info.stderr)
 
     def on_finish(self, exec_infos, success):

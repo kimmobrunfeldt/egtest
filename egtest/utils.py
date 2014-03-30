@@ -3,21 +3,20 @@ Generic functions.
 """
 
 import subprocess
-import sys
 
-_PY3 = sys.version_info >= (3, 0)
+import six
 
 
 def read_file(filepath, encoding='utf-8'):
     """Reads file's contents and returns unicode."""
     open_func = open
-    if _PY3:
+    if six.PY3:
         open_func = lambda f, mode: open(f, mode, encoding=encoding)
 
     with open_func(filepath, 'r') as f:
         content = f.read()
 
-    if not _PY3:
+    if not six.PY3:
         content = content.decode(encoding, 'replace')
 
     return content
@@ -26,7 +25,7 @@ def read_file(filepath, encoding='utf-8'):
 def write_file(text, filepath, encoding='utf-8'):
     """Writes unicode to file with specified encoding."""
     open_func = open
-    if _PY3:
+    if six.PY3:
         open_func = lambda f, mode: open(f, mode, encoding=encoding)
     else:
         text = text.encode(encoding, 'replace')
@@ -51,10 +50,10 @@ def run_command(command):
                          stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
     return_value = p.wait()
-    return return_value, stdout, stderr
+    return return_value, stdout.decode('utf-8'), stderr.decode('utf-8')
 
 
 def indent(text, indent=4):
     """Indents text with spaces."""
-    return '\n'.join([u' ' * indent + x for x in text.splitlines()])
+    return u'\n'.join([u' ' * indent + x for x in text.splitlines()])
 

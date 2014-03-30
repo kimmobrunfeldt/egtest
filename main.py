@@ -26,6 +26,8 @@ import os
 import sys
 import tempfile
 
+import six
+
 from egtest import injecthooks, parsers, reporters, utils, __version__
 
 
@@ -66,6 +68,8 @@ def read_text(filename):
     else:
         # This makes it possible to use via pipe e.g. x | python egtest.py
         text = sys.stdin.read()
+        if six.PY2:
+            text = text.decode('utf-8')
 
     return text
 
@@ -140,6 +144,7 @@ def run_code_block(code_info):
 def run_code(code_info):
     f, abspath = tempfile.mkstemp(text=True)
     utils.write_file(code_info.code, abspath)
+    os.close(f)
 
     ret_val, stdout, stderr = utils.run_command([code_info.command, abspath])
     exec_info = reporters.ExecInfo(

@@ -1,3 +1,4 @@
 docopt==0.6.1
 docopts==0.6.1
+six==1.6.1
 git+https://github.com/kimmobrunfeldt/colorama.git

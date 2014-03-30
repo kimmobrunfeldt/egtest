@@ -35,7 +35,7 @@ class GitHubMarkdownParser(object):
 
     def _find_command(self, block):
         """Finds language of code block"""
-        splitted = block.split('\n', 1)
+        splitted = block.split(u'\n', 1)
         if not splitted[0]:
             return None
 
@@ -43,7 +43,7 @@ class GitHubMarkdownParser(object):
 
     def _clean_block(self, block):
         """Cleans single block match text from surrounding markdown syntax."""
-        splitted = block.split('\n', 1)
+        splitted = block.split(u'\n', 1)
 
         if len(splitted) < 2:
             return block
@@ -65,7 +65,7 @@ class GitHubMarkdownParser(object):
 
             new_lines.append(line)
 
-        return '\n'.join(new_lines)
+        return u'\n'.join(new_lines)
 
 
 # List all available parsers for config-friendly usage
