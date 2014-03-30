@@ -50,23 +50,6 @@ class GitHubMarkdownParser(object):
 
         return splitted[1].strip()
 
-    def _remove_indentation(self, text):
-        """Removes extra indentation from text block. Indentation of first text
-        line is counted as 'extra'.
-        """
-        lines = text.splitlines()
-        indentation = len(lines[0]) - len(lines[0].lstrip())
-        indent_string = lines[0][:indentation]
-
-        new_lines = []
-        for line in lines:
-            if line.startswith(indent_string):
-                line = line[indentation:]
-
-            new_lines.append(line)
-
-        return u'\n'.join(new_lines)
-
 
 # List all available parsers for config-friendly usage
 available = {
