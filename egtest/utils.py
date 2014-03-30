@@ -56,4 +56,3 @@ def run_command(command):
 def indent(text, indent=4):
     """Indents text with spaces."""
     return u'\n'.join([u' ' * indent + x for x in text.splitlines()])
-

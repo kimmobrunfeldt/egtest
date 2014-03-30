@@ -48,8 +48,8 @@ def inject_all(code_info):
 
 
 # Code which should be injected to each example
-# First object can be either function to decide if the injection should be done,
-# or str which is name of egtest.parsers.CodeInfo.command to be matched.
+# First object can be either function to decide if the injection should be
+# done, or str which is name of egtest.parsers.CodeInfo.command to be matched.
 # Injectors are executed in the order of list
 hooks = [
     (should_inject_custom, inject_custom),

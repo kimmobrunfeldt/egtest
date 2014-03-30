@@ -80,7 +80,6 @@ class JsonReporter(object):
         }
         self._json['executions'].append(execution)
 
-
     def on_finish(self, exec_infos, success):
         print(json.dumps(self._json))
 
