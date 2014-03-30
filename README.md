@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/kimmobrunfeldt/egtest/badge.png?branch=master)](https://coveralls.io/r/kimmobrunfeldt/egtest?branch=master)
 [![Badge fury](https://badge.fury.io/py/egtest.png)](https://badge.fury.io/py/egtest.png)
 
-Incorrect example is worse than no example at all. *E.g. test* parses code blocks from documentation, runs them and reports possible errors. Your examples can be written in any language. There are similar projects but [they didn't suit my needs](#motivation).
+Incorrect example is worse than no example at all. *E.g. test* parses code blocks from documentation, runs them and reports possible errors. Your examples can be written in any language. There are similar projects but they didn't suit my needs. ([Motivation](#motivation))
 
 **Example**
 
