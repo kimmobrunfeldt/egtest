@@ -1,5 +1,7 @@
 # E.g. test
 
+*I personally use this to test Python examples and it works well. However if you need better support for other languages, open a new issue. Tests cover basic usage of egtest.*
+
 [![Build Status](https://travis-ci.org/kimmobrunfeldt/egtest.png?branch=master)](https://travis-ci.org/kimmobrunfeldt/egtest)
 [![Coverage Status](https://coveralls.io/repos/kimmobrunfeldt/egtest/badge.png?branch=master)](https://coveralls.io/r/kimmobrunfeldt/egtest?branch=master)
 [![Badge fury](https://badge.fury.io/py/egtest.png)](https://badge.fury.io/py/egtest.png)
